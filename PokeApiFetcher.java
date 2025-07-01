@@ -13,6 +13,7 @@ public class PokeApiFetcher {
                 "https://pokeapi.co/api/v2/pokemon/pikachu",
                 "https://pokeapi.co/api/v2/pokemon/151/"
         };
+        // ここに他のポケモンのAPI URLを追加できます
         for (String apiUrl : urls) {
             try {
                 URL url = new URL(apiUrl);
