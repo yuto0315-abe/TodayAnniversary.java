@@ -9,12 +9,10 @@ import org.json.JSONArray;
 
 public class PokeApiFetcher {
     public static void main(String[] args) {
-        String[] urls = {
-                "https://pokeapi.co/api/v2/pokemon/pikachu",
-                "https://pokeapi.co/api/v2/pokemon/151/"
-        };
-        // ここに他のポケモンのAPI URLを追加できます
-        for (String apiUrl : urls) {
+        String[] names = { "pikachu", "151", "bulbasaur", "charmander", "squirtle", "eevee", "snorlax", "lucario",
+                "gengar", "mewtwo", "psyduck", "jigglypuff", "lapras", "dragonite", "ditto" };
+        for (String name : names) {
+            String apiUrl = "https://pokeapi.co/api/v2/pokemon/" + name;
             try {
                 URL url = new URL(apiUrl);
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -33,7 +31,7 @@ public class PokeApiFetcher {
                     }
                 }
                 JSONObject json = new JSONObject(responseBody.toString());
-                String name = json.getString("name");
+                String pokeName = json.getString("name");
                 int id = json.getInt("id");
                 JSONArray types = json.getJSONArray("types");
                 StringBuilder typeNames = new StringBuilder();
@@ -44,7 +42,7 @@ public class PokeApiFetcher {
                     typeNames.append(typeObj.getString("name"));
                 }
                 System.out.println("ポケモンID: " + id);
-                System.out.println("名前: " + name);
+                System.out.println("名前: " + pokeName);
                 System.out.println("タイプ: " + typeNames);
                 System.out.println("----------------------");
             } catch (Exception e) {
