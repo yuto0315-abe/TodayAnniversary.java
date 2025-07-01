@@ -25,13 +25,11 @@ public class PixelMonsterApiFetcher {
                 }
             }
             String responseText = responseBody.toString();
-            try {
-                JSONObject json = new JSONObject(responseText);
-                String svgUrl = json.getString("svgUrl");
-                return String.format("モンスター画像URL: %s", svgUrl);
-            } catch (Exception ex) {
-                return "JSONパースエラー: " + ex.getMessage() + "\nレスポンス内容: " + responseText;
+            // SVGデータをファイルに保存
+            try (java.io.FileWriter fw = new java.io.FileWriter("monster.svg")) {
+                fw.write(responseText);
             }
+            return "SVGデータをmonster.svgとして保存しました。";
         } catch (Exception e) {
             return "エラー: " + e.getMessage();
         }
