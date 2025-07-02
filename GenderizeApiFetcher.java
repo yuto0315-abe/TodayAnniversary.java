@@ -27,7 +27,13 @@ public class GenderizeApiFetcher {
             }
             JSONObject json = new JSONObject(responseBody.toString());
             String gender = json.optString("gender", "不明");
-            double probability = json.optDouble("probability", 0.0);
+            String probabilityStr;
+            if (json.isNull("probability")) {
+                probabilityStr = "-";
+            } else {
+                double probability = json.getDouble("probability");
+                probabilityStr = String.format("%.1f%%", probability * 100);
+            }
             int count = json.optInt("count", 0);
             String genderJp;
             switch (gender) {
@@ -43,7 +49,7 @@ public class GenderizeApiFetcher {
                 default:
                     genderJp = gender;
             }
-            return String.format("名前: %s\n性別: %s (%s)\n確率: %.2f\n件数: %d", name, genderJp, gender, probability, count);
+            return String.format("名前: %s\n性別: %s (%s)\n確率: %s\n件数: %d", name, genderJp, gender, probabilityStr, count);
         } catch (Exception e) {
             return "エラー: " + e.getMessage();
         }
