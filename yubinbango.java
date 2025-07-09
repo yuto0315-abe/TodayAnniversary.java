@@ -50,6 +50,10 @@ public class yubinbango {
             if (m3.find()) {
                 address = m3.group(1);
             }
+            if (state == city || city == address || address == state) {
+                System.out.println("住所の取得に失敗しました。");
+                return; // ここで処理を終了
+            }
             System.out.println(state);
             System.out.println(city);
             System.out.println(address);
