@@ -7,17 +7,9 @@ class getYubinbango {
 public class yubinbango {
     private static final String API_URL = "http://zip.cgis.biz/xml/zip.php?zn=";
 
-    public static void main(String[] args) {
-        System.out.println("郵便番号を入力");
-        Scanner scanner = new Scanner(System.in);
-        String Code = scanner.nextLine();
-        scanner.close();
+    public static String yubinbango(String Code) {
 
         try {
-            if (Code.length() != 7 || !Code.matches("\\d{7}")) {
-                System.out.println("郵便番号は7桁の数字で入力してください。");
-                return; // ここで処理を終了
-            }
             String apiUrl = API_URL + Code;
             java.net.URL url = new java.net.URL(apiUrl);
             java.net.HttpURLConnection conn = (java.net.HttpURLConnection) url.openConnection();
@@ -51,17 +43,29 @@ public class yubinbango {
                 address = m3.group(1);
             }
             if (state == city || city == address || address == state) {
-                System.out.println("住所の取得に失敗しました。");
-                return; // ここで処理を終了
+                return "住所の取得に失敗しました。";
+                // ここで処理を終了
             }
             System.out.println(state);
             System.out.println(city);
             System.out.println(address);
-
             System.out.println("住所: " + state + city + address);
 
         } catch (Exception e) {
             System.out.println("住所の取得に失敗しました: " + e.getMessage());
         }
+        return "住所の取得に失敗しました。";
+    }
+
+    public static void main(String[] args) {
+        System.out.println("郵便番号を入力");
+        Scanner scanner = new Scanner(System.in);
+        String Code = scanner.nextLine();
+        scanner.close();
+        if (Code.length() != 7 || !Code.matches("\\d{7}")) {
+            System.out.println("郵便番号は7桁の数字で入力してください。");
+            return; // ここで処理を終了
+        }
+        yubinbango.yubinbango(Code);
     }
 }
