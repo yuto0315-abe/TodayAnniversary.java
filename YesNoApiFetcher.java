@@ -34,7 +34,31 @@ public class YesNoApiFetcher {
     }
 
     public static void main(String[] args) {
-        String result = getYesNoAnswer();
-        System.out.println(result);
+        java.util.Scanner scanner = new java.util.Scanner(System.in);
+        while (true) {
+            System.out.print("yes/no/maybe どれになるか予想して入力してください（終了は空欄Enter）: ");
+            String guess = scanner.nextLine().trim().toLowerCase();
+            if (guess.isEmpty()) break;
+            String result = getYesNoAnswer();
+            // 答え抽出
+            String answer = null;
+            int idx = result.indexOf("答え: ");
+            if (idx >= 0) {
+                int end = result.indexOf('\n', idx);
+                if (end > idx) {
+                    answer = result.substring(idx + 4, end).trim().toLowerCase();
+                } else {
+                    answer = result.substring(idx + 4).trim().toLowerCase();
+                }
+            }
+            if (answer != null && guess.equals(answer)) {
+                System.out.println(result);
+                System.out.println("正解！\n----------------------");
+            } else {
+                System.out.println(result);
+                System.out.println("不正解。正解は " + (answer != null ? answer : "不明") + " でした\n----------------------");
+            }
+        }
+        scanner.close();
     }
 }

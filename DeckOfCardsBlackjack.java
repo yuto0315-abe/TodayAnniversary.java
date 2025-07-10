@@ -36,7 +36,7 @@ public class DeckOfCardsBlackjack {
                     System.out.println("バースト！あなたの負けです。\n==============================");
                     return;
                 }
-                System.out.print("ヒットしますか？(h: ヒット, s: スタンド): ");
+                System.out.print("カードを引ますか？(h: カードを引く, s: スタンド): ");
                 String cmd = scanner.nextLine().trim().toLowerCase();
                 if (cmd.equals("h")) {
                     JSONArray newCard = drawCards(deckId, 1);
@@ -93,27 +93,10 @@ public class DeckOfCardsBlackjack {
         for (int i = 0; i < hand.length(); i++) {
             JSONObject card = hand.getJSONObject(i);
             String value = card.optString("value", "?");
-            String suit = card.optString("suit", "?");
-            String suitMark = suitToMark(suit);
-            System.out.print("[" + value + suitMark + "] ");
+            // スート記号を消して値のみ表示
+            System.out.print("[" + value + "] ");
         }
         System.out.println();
-    }
-
-    // スートを記号に変換
-    private static String suitToMark(String suit) {
-        switch (suit.toUpperCase()) {
-            case "SPADES":
-                return "♠";
-            case "HEARTS":
-                return "♥";
-            case "DIAMONDS":
-                return "♦";
-            case "CLUBS":
-                return "♣";
-            default:
-                return suit;
-        }
     }
 
     // 手札の合計点を計算
