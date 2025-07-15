@@ -9,10 +9,12 @@ import java.util.Scanner;
 public class DittoQuiz {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
+        java.util.Random rand = new java.util.Random();
         while (true) {
             try {
-                // DittoのAPIから情報取得
-                String apiUrl = "https://pokeapi.co/api/v2/pokemon/ditto";
+                // 図鑑番号（1～1025）でランダム出題（2025年7月時点で1025まで存在）
+                int pokeNumber = rand.nextInt(1025) + 1;
+                String apiUrl = "https://pokeapi.co/api/v2/pokemon/" + pokeNumber;
                 JSONObject json = getJson(apiUrl);
                 String pokeName = json.getString("name");
                 JSONArray types = json.getJSONArray("types");
@@ -27,11 +29,12 @@ public class DittoQuiz {
                 int weight = json.getInt("weight");
                 int baseExp = json.getInt("base_experience");
 
-                // 日本語名取得
+                // 日本語名・色・世代取得
                 String pokeNameJp = null;
-                int pokeNumber = -1;
+                String colorJp = null;
+                String generation = null;
                 try {
-                    String speciesUrl = "https://pokeapi.co/api/v2/pokemon-species/ditto";
+                    String speciesUrl = "https://pokeapi.co/api/v2/pokemon-species/" + pokeNumber;
                     JSONObject jsonJp = getJson(speciesUrl);
                     JSONArray names = jsonJp.getJSONArray("names");
                     for (int i = 0; i < names.length(); i++) {
@@ -41,7 +44,8 @@ public class DittoQuiz {
                             break;
                         }
                     }
-                    pokeNumber = jsonJp.getInt("id");
+                    colorJp = jsonJp.getJSONObject("color").getString("name");
+                    generation = jsonJp.getJSONObject("generation").getString("name");
                 } catch (Exception ex) {
                     // 無視
                 }
@@ -73,14 +77,43 @@ public class DittoQuiz {
                     String typeEn = typeObj.getString("name");
                     typeNamesJp.append(typeMap.getOrDefault(typeEn, typeEn));
                 }
+                // 色・世代の日本語訳
+                java.util.Map<String, String> colorMap = new java.util.HashMap<>();
+                colorMap.put("black", "くろ");
+                colorMap.put("blue", "あお");
+                colorMap.put("brown", "ちゃいろ");
+                colorMap.put("gray", "はいいろ");
+                colorMap.put("green", "みどり");
+                colorMap.put("pink", "ピンク");
+                colorMap.put("purple", "むらさき");
+                colorMap.put("red", "あか");
+                colorMap.put("white", "しろ");
+                colorMap.put("yellow", "きいろ");
+                java.util.Map<String, String> genMap = new java.util.HashMap<>();
+                genMap.put("generation-i", "第1世代");
+                genMap.put("generation-ii", "第2世代");
+                genMap.put("generation-iii", "第3世代");
+                genMap.put("generation-iv", "第4世代");
+                genMap.put("generation-v", "第5世代");
+                genMap.put("generation-vi", "第6世代");
+                genMap.put("generation-vii", "第7世代");
+                genMap.put("generation-viii", "第8世代");
+                genMap.put("generation-ix", "第9世代");
                 // クイズ出題
-                System.out.println("\n【ポケモンクイズ】");
-                System.out.println("ヒント: ");
-                System.out.println("・タイプ: " + typeNamesJp);
-                System.out.println("・高さ: " + height);
-                System.out.println("・重さ: " + weight);
-                System.out.println("・基礎経験値: " + baseExp);
-                System.out.print("このポケモンの名前（英語）を答えてください（終了は空欄Enter）: ");
+                System.out.println("\n==============================");
+                System.out.println("【ポケモンクイズ】");
+                System.out.println("------------------------------");
+                System.out.println("ヒント:");
+                System.out.println("  ・タイプ: " + typeNamesJp);
+                System.out.println("  ・高さ: " + height + "（デシメートル）");
+                System.out.println("  ・重さ: " + weight + "（ヘクトグラム）");
+                System.out.println("  ・基礎経験値: " + baseExp);
+                if (colorJp != null)
+                    System.out.println("  ・色: " + colorMap.getOrDefault(colorJp, colorJp));
+                if (generation != null)
+                    System.out.println("  ・世代: " + genMap.getOrDefault(generation, generation));
+                System.out.println("------------------------------");
+                System.out.print("このポケモンの名前を図鑑ナンバーで答えてください（終了は空欄Enter）: ");
                 String answer = scanner.nextLine().trim().toLowerCase();
                 if (answer.isEmpty())
                     break;
