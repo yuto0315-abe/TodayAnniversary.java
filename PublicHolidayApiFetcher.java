@@ -43,8 +43,7 @@ public class PublicHolidayApiFetcher {
                 JSONObject holiday = arr.getJSONObject(i);
                 String date = holiday.getString("date");
                 String localName = holiday.getString("localName");
-                String name = holiday.getString("name");
-                System.out.println(date + " : " + localName + " (" + name + ")");
+                System.out.println(date + " : " + localName );
             }
         } catch (Exception e) {
             System.out.println("エラー: " + e.getMessage());

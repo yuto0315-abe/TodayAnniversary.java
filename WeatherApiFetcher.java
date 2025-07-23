@@ -6,7 +6,7 @@ import org.json.JSONObject;
 
 public class WeatherApiFetcher {
     // Open-Meteoの天気予報APIを使う例（APIキー不要）
-    public static String getWeatherForecast(double latitude, double longitude) {
+    public static String getWeatherForecast(double latitude, double longitude, String locationName) {
         String apiUrl = String.format(
                 "https://api.open-meteo.com/v1/forecast?latitude=%f&longitude=%f&hourly=temperature_2m,weathercode&current_weather=true",
                 latitude, longitude);
@@ -31,7 +31,7 @@ public class WeatherApiFetcher {
             double temp = current.getDouble("temperature");
             int code = current.getInt("weathercode");
             String weather = getWeatherDescription(code);
-            return String.format("現在の気温: %.1f℃\n天気: %s (コード: %d)", temp, weather, code);
+            return String.format("【%s】\n現在の気温: %.1f℃\n天気: %s ", locationName, temp, weather);
         } catch (Exception e) {
             return "エラー: " + e.getMessage();
         }
@@ -90,7 +90,7 @@ public class WeatherApiFetcher {
         // 東京の緯度経度
         double lat = 35.6895;
         double lon = 139.6917;
-        String result = getWeatherForecast(lat, lon);
+        String result = getWeatherForecast(lat, lon, "東京");
         System.out.println(result);
     }
 }

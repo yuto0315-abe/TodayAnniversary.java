@@ -133,9 +133,12 @@ public class FortuneWithAdviceAndHoroscope {
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
 
             con.setRequestMethod("POST");
-
             con.setDoOutput(true);
-
+            con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+            // POSTボディに空文字を送信
+            try (java.io.OutputStream os = con.getOutputStream()) {
+                os.write(new byte[0]);
+            }
             con.connect();
 
             BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
@@ -342,12 +345,6 @@ public class FortuneWithAdviceAndHoroscope {
         System.out.println("★ 今日の運勢 ★");
 
         System.out.println(getFortune(month, day));
-
-        System.out.println("★ 星座占い ★");
-
-        String zodiacSign = getZodiacSign(month, day);
-
-        System.out.println(getHoroscope(zodiacSign));
 
         System.out.println("★ ラッキーカラー ★");
 
